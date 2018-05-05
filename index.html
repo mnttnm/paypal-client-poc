@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.11.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.11.0/js/paypal-checkout.min.js"></script>
+</head>
+
+<body>
+    <div id="paypal-button-container"></div>
+
+    <script>
+
+
+    // Render the PayPal button
+
+    paypal.Button.render({
+
+        // Set your environment
+
+        env: 'sandbox', // sandbox | production
+
+        // Specify the style of the button
+
+        style: {
+            label: 'checkout',
+            size:  'small',    // small | medium | large | responsive
+            shape: 'pill',     // pill | rect
+            color: 'gold'      // gold | blue | silver | black
+        },
+
+        // PayPal Client IDs - replace with your own
+        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+        client: {
+            sandbox:'AVC3mfPjR52TKhHmS-v9d29D2AKINQ_HdA4UKd9y__rO8fTqMRBD-UR_WhpY_lKWTBVOd4SasnUVzAag',
+        },
+
+        payment: function(data, actions) {
+            return actions.payment.create({
+                payment: {
+                    transactions: [
+                        {
+                            amount: { total: '1.01', currency: 'INR' }
+                        }
+                    ]
+                }
+            });
+        },
+
+        onAuthorize: function(data, actions) {
+            return actions.payment.execute().then(function() {
+                window.alert('Payment Complete!');
+            });
+        }
+
+    }, '#paypal-button-container');
+    </script>
+</body>
